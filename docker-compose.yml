@@ -1,0 +1,31 @@
+version: '3'
+services:
+   db:
+    image: mysql:8.0.21
+    restart: always
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: datasquad
+      MYSQL_DATABASE: datasquad
+      MYSQL_USER: datasquad
+      MYSQL_PASSWORD: datasquad
+    networks:
+      - data-squad-network
+
+   phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - '8081:80'
+    environment:
+      PMA_HOST: db
+      PMA_ARBITRARY: 1
+    networks:
+      - data-squad-network
+
+networks:
+  data-squad-network:
